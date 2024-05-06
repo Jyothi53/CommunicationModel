@@ -1,4 +1,4 @@
-bits = [0,0,0,0,0,1,1,0];
+bits = [0,0,0,1,0,1,1,0];
 % bits = adc();
 a = 1;
 Ts = 2;
@@ -103,5 +103,5 @@ stem(1:length(bits),bits);
 hold off;
 legend('y1_t','bits');
 
-prob = sum(y1_t ~= bits)/length(bits)
+prob = sum(y1_t~=bits)/length(bits)
 

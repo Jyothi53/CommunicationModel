@@ -1,4 +1,4 @@
-function ak_s = encoder (bitStream)
+function ak_s = encoder (bitStream,a,Ts)
     function outSym = QPSK (twoinBits, a) 
         % takes in 2 bits, returns corresponding [am, bm]
         % 00 - (a, 0)
@@ -20,8 +20,6 @@ function ak_s = encoder (bitStream)
         end
     end
     ak_s = zeros(length(bitStream)/2,2);
-    Ts = 1;
-    a = 1;
     idx2 = 1;
     for idx = 1:2:length(bitStream)
         p = QPSK([bitStream(idx), bitStream(idx+1)], a);
