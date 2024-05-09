@@ -1,7 +1,8 @@
 downsample_factor = 100;
 upsample_factor = downsample_factor;
 bits = adc('project.wav', downsample_factor);
-a = 1;
+% bits = [0,0,0,0,1,0,0,1,1,1,1,1,0,0];
+a = 4;
 Ts = 2;
 Fs = 1e2;
 t = 0:1/Fs:Ts;
@@ -56,11 +57,11 @@ xlabel('t');
 ylabel('p(t)');
 title("Rectangular pulse");
 
-% figure;
-% plot(temp_t,p_t2);
-% xtitle('t');
-% ytitle('p(t)');
-% title("Raised cosine pulse");
+figure;
+plot(temp_t,p_t2);
+xlabel('t');
+ylabel('p(t)');
+title("Raised cosine pulse");
 
 x3_t = linecoding (ak_s, p_t2, main_t, Fs, Ts);
 
@@ -79,7 +80,7 @@ sgtitle('Transmitter: line coding');
 
 
 % MODULATION
-wc = 1e5;
+wc = 1e6;
 x4_t = modulation(x3_t, main_t, wc);
 
 figure;
@@ -149,7 +150,74 @@ disp("Probability of error = " + string(Prob_error));
 dac(y1_t, upsample_factor);
 
 
+
+
 % Calculate the energy of p_t2 using numerical integration
 % integrand_squared = @(tt) (sin(pi*tt/Ts)./tt *Ts/pi.*cos(pi*rolloff*tt/Ts)./(1-4*(rolloff^2)*tt.^2/(Ts^2))) .^2;
 % energy_p_t2 = integral(integrand_squared, -inf, inf);
 % disp(energy_p_t2);
+
+
+
+% Compute the autocorrelation functions
+% autocorr_x3 = xcorr(x3_t(1,:), 'biased');
+% autocorr_x4 = xcorr(x4_t, 'biased');
+% autocorr_y3 = xcorr(y3_t(1,:), 'biased');
+% autocorr_y4 = xcorr(y4_t, 'biased');
+% 
+% % Compute the Fourier transforms of the autocorrelation functions
+% fft_autocorr_x3 = fft(autocorr_x3);
+% fft_autocorr_x4 = fft(autocorr_x4);
+% fft_autocorr_y3 = fft(autocorr_y3);
+% fft_autocorr_y4 = fft(autocorr_y4);
+% 
+% % Compute the frequencies corresponding to the Fourier transforms
+% N = length(autocorr_x3);
+% Fs_autocorr = 1 / (t(2) - t(1)); % Sampling frequency for autocorrelation
+% freq_autocorr = Fs_autocorr * (-N/2:N/2-1) / N;
+% 
+% % Plot the PSDs using autocorrelation method
+% figure;
+% plot((abs(fft_autocorr_x3).^2));
+% xlabel('Frequency (Hz)');
+% ylabel('Power/Frequency');
+% title('PSD of x3(t) using Autocorrelation Method');
+% 
+% figure;
+% plot((abs(fft_autocorr_x4).^2));
+% xlabel('Frequency (Hz)');
+% ylabel('Power/Frequency');
+% title('PSD of x4(t) using Autocorrelation Method');
+% 
+% figure;
+% plot(freq_autocorr, fftshift(abs(fft_autocorr_y3).^2));
+% xlabel('Frequency (Hz)');
+% ylabel('Power/Frequency');
+% title('PSD of y3(t) using Autocorrelation Method');
+% 
+% figure;
+% plot(freq_autocorr, fftshift(abs(fft_autocorr_y4).^2));
+% xlabel('Frequency (Hz)');
+% ylabel('Power/Frequency');
+% title('PSD of y4(t) using Autocorrelation Method');
+
+
+
+% Plots of input and output constellations.
+% r1_t = channel(ak_s(1:end,1),'Memory',main_t,Ts,Fs);
+% r2_t = channel(ak_s(1:end,2),'Memory',main_t,Ts,Fs);
+% 
+% figure;
+% subplot(1,2,1);
+% scatter(ak_s(1:end,1), ak_s(1:end,2), 'b', 'filled');
+% xlabel('In-phase');
+% ylabel('Quadrature');
+% title('Input Constellation (QPSK)');
+% axis equal;
+% 
+% subplot(1,2,2);
+% scatter(r1_t, r2_t, 'r', 'filled');
+% xlabel('In-phase');
+% ylabel('Quadrature');
+% title('Output Constellation (with Noise)');
+% axis equal;
