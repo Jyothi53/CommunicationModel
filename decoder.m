@@ -9,7 +9,7 @@ function y1_t = decoder (y2_t,a,Ts,Fs,t1)
         elseif -a/2 < ak && ak < a/2 && bk < -a/2
             bits = [1, 0];
         else
-            bits = [1, 1]; % Default value for invalid cases
+            bits = [1, 1]; 
         end
     end
 

@@ -1,5 +1,5 @@
-bits = [0,0,0,0,1,1,1,0];
-% bits = adc('project.wav');
+
+bits = adc('project.wav');
 a = 1;
 Ts = 2;
 Fs = 1e2;
@@ -61,7 +61,7 @@ title("Rectangular pulse");
 % ytitle('p(t)');
 % title("Raised cosine pulse");
 
-x3_t = linecoding (ak_s, p_t1, main_t, Fs, Ts);
+x3_t = linecoding (ak_s, p_t2, main_t, Fs, Ts);
 
 figure;
 subplot(2,1,1);
@@ -145,4 +145,4 @@ title('Input bits and Decoded Bits');
 Prob_error = sum(y1_t ~= bits)/length(bits);
 disp("Probability of error = " + string(Prob_error));
 
-% p = dac(y1_t);
+dac(y1_t);

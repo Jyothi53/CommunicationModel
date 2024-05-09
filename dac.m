@@ -1,10 +1,27 @@
-function analog_signal = dac(binary_vector)
+function dac(binary_vector)
+
+    fs = 48000;
+
     output_file = "out.wav";
-    binary_matrix = reshape(binary_vector, [], 8); % Reshape back to matrix
-    audio_integers = bin2dec(binary_matrix); % Convert binary to decimal
-    audio_reconstructed = int8(audio_integers); % Convert to int8
-    audio_reconstructed_normalized = double(audio_reconstructed) / 127; % Normalize to [-1, 1]
+    binary_matrix = reshape(binary_vector, [],8).'; % Reshape back to matrix
+    audio_integers = bin2dec_cus(binary_matrix); % Convert binary strings to decimal
+    audio_downsampled_inverse = typecast(uint8(audio_integers), 'int8');
+
+    m = 100;
+    audio_downsampled_inverse_double = double(audio_downsampled_inverse);
+    
+    % Upsample the signal
+    upsampled_signal = interp1(1:length(audio_downsampled_inverse_double), audio_downsampled_inverse_double, 1:1/m:length(audio_downsampled_inverse_double));
+    upsampled_signal = upsampled_signal./127;
+    figure;
+    subplot(2,1,1)
+    plot(audio_downsampled_inverse);
+    title('audio downsampledinverse')
+    subplot(2,1,2)
+    plot(upsampled_signal);
+    title('upsampled signal')
+    
     % Save the reconstructed audio
-    audiowrite(output_file, audio_reconstructed_normalized, fs);
-    sound(audio_reconstructed_normalized, fs); % Play reconstructed audio
+    audiowrite(output_file, upsampled_signal, fs);
+    
 end
