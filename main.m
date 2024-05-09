@@ -1,14 +1,15 @@
-bits = [0,0,0,0,0,1,1,0];
-% bits = adc();
+% bits = [0,0,0,0,1,1,1,0];
+bits = adc('project.wav');
 a = 1;
 Ts = 2;
 ak_s = encoder(bits,a,Ts);
-% disp(ak_s);
+disp(size(ak_s));
 
-Fs = 1e4;
+Fs = 1e2;
 t = 0:1/Fs:Ts;
 t1 = 0:1/Fs:Ts*length(bits)/2;
 ttx = -Ts*length(bits)/2:1/Fs:Ts*length(bits)/2;
+% disp([size(ttx), size(ak_s,1)]);
 p_t1 = zeros(size(ttx));
 p_t2 = zeros(size(ttx));
 % rect
@@ -43,7 +44,7 @@ title("raised");
 
 figure;
 plot(ttx,p_t1);
-title("rect")
+title("rect");
 
 figure;
 subplot(2,1,1);
@@ -51,16 +52,16 @@ stem(1:length(bits)/2,ak_s(1:end,1));
 title('mod aks');
 subplot(2,1,2);
 stem(1:length(bits)/2, ak_s(1:end,2));
-title('mod bks')
+title('mod bks');
 
-x3_t = linecoding (ak_s, p_t2, t1, Fs,Ts);
+x3_t = linecoding (ak_s, p_t2, t1, Fs, Ts);
 
 figure;
 plot(t1,x3_t(1,1:end));
-title('mod  ak*pt')
+title('mod  ak*pt');
 figure;
 plot(t1,x3_t(2,1:end));
-title('mod  bk*pt')
+title('mod  bk*pt');
 
 
 wc = 1e5;
