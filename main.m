@@ -1,5 +1,6 @@
-
-bits = adc('project.wav');
+downsample_factor = 100;
+upsample_factor = downsample_factor;
+bits = adc('project.wav', downsample_factor);
 a = 1;
 Ts = 2;
 Fs = 1e2;
@@ -9,7 +10,7 @@ temp_t = -Ts*length(bits)/2:1/Fs:Ts*length(bits)/2;
 
 
 % ENCODER
-ak_s = encoder(bits,a,Ts);
+ak_s = encoder(bits,a);
 
 figure;
 subplot(2,1,1);
@@ -145,4 +146,10 @@ title('Input bits and Decoded Bits');
 Prob_error = sum(y1_t ~= bits)/length(bits);
 disp("Probability of error = " + string(Prob_error));
 
-dac(y1_t);
+dac(y1_t, upsample_factor);
+
+
+% Calculate the energy of p_t2 using numerical integration
+% integrand_squared = @(tt) (sin(pi*tt/Ts)./tt *Ts/pi.*cos(pi*rolloff*tt/Ts)./(1-4*(rolloff^2)*tt.^2/(Ts^2))) .^2;
+% energy_p_t2 = integral(integrand_squared, -inf, inf);
+% disp(energy_p_t2);

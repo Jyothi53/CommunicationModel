@@ -1,4 +1,4 @@
-function dac(binary_vector)
+function dac(binary_vector, upsample_factor)
 
     fs = 48000;
 
@@ -7,11 +7,10 @@ function dac(binary_vector)
     audio_integers = bin2dec_cus(binary_matrix); % Convert binary strings to decimal
     audio_downsampled_inverse = typecast(uint8(audio_integers), 'int8');
 
-    m = 100;
     audio_downsampled_inverse_double = double(audio_downsampled_inverse);
     
     % Upsample the signal
-    upsampled_signal = interp1(1:length(audio_downsampled_inverse_double), audio_downsampled_inverse_double, 1:1/m:length(audio_downsampled_inverse_double));
+    upsampled_signal = interp1(1:length(audio_downsampled_inverse_double), audio_downsampled_inverse_double, 1:1/upsample_factor:length(audio_downsampled_inverse_double));
     upsampled_signal = upsampled_signal./127;
     figure;
     subplot(2,1,1)

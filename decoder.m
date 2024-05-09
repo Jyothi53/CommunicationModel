@@ -13,8 +13,8 @@ function y1_t = decoder (y2_t,a,Ts,Fs,t1)
         end
     end
 
-    ak_s = y2_t(1,1:end).*sqrt(Ts/2);
-    bk_s = y2_t(2,1:end).*sqrt(Ts/2);
+    ak_s = y2_t(1,1:end);
+    bk_s = y2_t(2,1:end);
     y1_t = zeros(1,2*(length(t1)-1)/Ts/Fs);
     for idx = 1:(length(t1)-1)/Ts/Fs
         ak = ak_s(idx);

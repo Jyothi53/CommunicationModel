@@ -1,6 +1,5 @@
-function binary_row_vector = adc (file)
-    [audio, fs] = audioread(file);
-    % disp(fs)
+function binary_row_vector = adc (file, downsample_factor)
+    [audio] = audioread(file);
     audio = mean(audio, 2);
     figure;
     subplot(3,1,1);
@@ -11,7 +10,6 @@ function binary_row_vector = adc (file)
     plot(audio_normalized);
     title('audio normalized');
     
-    downsample_factor = 100; 
     audio_downsampled = downsample(audio_normalized, downsample_factor);
     
     audio_binary = dec2bin(typecast(audio_downsampled(:), 'uint8'), 8); 
